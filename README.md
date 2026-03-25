@@ -25,13 +25,26 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+**Game purpose:** A number guessing game built with Streamlit where the player tries to guess a secret number within a limited number of attempts. Hints tell us whether to guess higher or lower.
+
+**Bugs found:**
+1. The Go Higher / Go Lower hints were backwards ,  guessing too high told you to go higher, making the game unwinnable.
+2. The New Game button did not reset `status` or `history`, so after winning or losing the game stayed permanently locked.
+3. `st.session_state.attempts` was initialized to `1` instead of `0`, causing the attempt counter to show 7 remaining on first load but 8 after clicking New Game.
+
+**Fixes applied:**
+1. Refactored all game logic (`check_guess`, `parse_guess`, `update_score`, `get_range_for_difficulty`) from `app.py` into `logic_utils.py`. Fixed `check_guess` so `guess > secret` returns `"Too High"` with a "Go LOWER" hint.
+2. Added `st.session_state.status = "playing"` and `st.session_state.history = []` to the New Game reset block.
+3. Changed `st.session_state.attempts` initialization from `1` to `0`.
+4. Added `conftest.py` at project root so `pytest` can find `logic_utils` from the `tests/` subdirectory.
 
 ## 📸 Demo
 
-- [ ] [Insert a screenshot of your fixed, winning game here]
+![Fixed game screenshot](screenshots/game_fixed.png)
+
+### pytest results (6 tests passing)
+
+![pytest passing](screenshots/pytest_passing.png)
 
 ## 🚀 Stretch Features
 

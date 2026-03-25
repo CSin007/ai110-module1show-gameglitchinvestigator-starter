@@ -32,13 +32,14 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 
 ## 4. What did you learn about Streamlit and state?
 
-- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+Every time a user clicks a button or types something in a Streamlit app, the entire Python script reruns from top to bottom — like refreshing a page. Without `st.session_state`, any variable you set (like the secret number or the attempt count) would reset to its starting value on every rerun. `session_state` is like a small notebook that Streamlit keeps between reruns, so values persist across interactions. This is why the New Game bug was subtle — resetting `attempts` and `secret` wasn't enough; `status` also needed to be reset, otherwise the script would rerun, hit the `status != "playing"` check, and immediately stop the game again.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-- What is one habit or strategy from this project that you want to reuse in future labs or projects?
-  - This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
-- In one or two sentences, describe how this project changed the way you think about AI generated code.
+- **Habit to reuse:** Running `pytest` after every fix, not just at the end. Having the tests already written (even if they were failing) meant I always had a clear pass/fail signal for whether my change actually worked. I'll write tests first in future projects.
+
+- **Do differently next time:** I would verify AI-suggested code in a smaller piece before applying it to the whole file. When Claude refactored all four functions at once, the import error from `conftest.py` being missing took extra back-and-forth to resolve. Testing one function move at a time would have caught that faster.
+
+- **How this changed my thinking:** AI-generated code looks confident and complete but can have subtle logic inversions (like the hint directions) or structural gaps (like missing path configuration for imports) that only show up when you actually run it. I now treat AI output as a strong first draft that still needs to be read line-by-line and verified with tests.
